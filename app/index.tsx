@@ -1,11 +1,32 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Button, Image, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Link } from "expo-router";
+import Spacer from "../components/Spacer";
+import SafeView from "../components/SafeView";
+import { Models } from "react-native-appwrite";
+import { useUser } from "../hooks/useUser";
 
 const index = () => {
+  const user = useUser();
   return (
-    <View style={styles.container}>
-      <Text>index</Text>
-    </View>
+    <SafeView style={styles.container} safe={true}>
+      <Image source={require("../assets/img/logo-SL.png")} style={styles.img} />
+      <Text>Shopping List App</Text>
+      {user.user?.$id ? (
+        <Text>{user.user?.name}</Text>
+      ) : (
+        <Text>"Not Logged in"</Text>
+      )}
+
+      <Spacer width="100%" heigth={40} />
+      <Link href={"/Login"}>
+        <Text>Login</Text>
+      </Link>
+      <Link href={"/Register"}>
+        <Text>Register</Text>
+      </Link>
+      <Button title="Logout" onPress={user.logout} />
+    </SafeView>
   );
 };
 
@@ -16,5 +37,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  img: {
+    width: 150,
+    height: 150,
+    borderRadius: 4,
+    elevation: 4,
+    marginVertical: 10,
+  },
+  text: {
+    fontWeight: "500",
+    fontSize: 14,
+    color: "#fff",
   },
 });
